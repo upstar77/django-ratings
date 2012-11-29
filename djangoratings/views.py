@@ -1,7 +1,7 @@
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, Http404
-
+from django.utils.translation import ugettext_lazy as _
 from exceptions import *
 from django.conf import settings
 from default_settings import RATINGS_VOTES_PER_IP
@@ -57,11 +57,11 @@ class AddRatingView(object):
         raise NotImplementedError
 
     def too_many_votes_from_ip_response(self, request, context):
-        response = HttpResponse('Too many votes from this IP address for this object.')
+        response = HttpResponse(_('Too many votes from this IP address for this object.'))
         return response
 
     def rating_changed_response(self, request, context, adds={}):
-        response = HttpResponse('Vote changed.')
+        response = HttpResponse(_('Vote changed.'))
         if 'cookie' in adds:
             cookie_name, cookie = adds['cookie_name'], adds['cookie']
             if 'deleted' in adds:
@@ -71,7 +71,7 @@ class AddRatingView(object):
         return response
     
     def rating_added_response(self, request, context, adds={}):
-        response = HttpResponse('Vote recorded.')
+        response = HttpResponse(_('Vote recorded.'))
         if 'cookie' in adds:
             cookie_name, cookie = adds['cookie_name'], adds['cookie']
             if 'deleted' in adds:
@@ -81,27 +81,27 @@ class AddRatingView(object):
         return response
 
     def authentication_required_response(self, request, context):
-        response = HttpResponse('You must be logged in to vote.')
+        response = HttpResponse(_('You must be logged in to vote.'))
         response.status_code = 403
         return response
     
     def cannot_change_vote_response(self, request, context):
-        response = HttpResponse('You have already voted.')
+        response = HttpResponse(_('You have already voted.'))
         response.status_code = 403
         return response
     
     def cannot_delete_vote_response(self, request, context):
-        response = HttpResponse('You can\'t delete this vote.')
+        response = HttpResponse(_('You can\'t delete this vote.'))
         response.status_code = 403
         return response
     
     def invalid_field_response(self, request, context):
-        response = HttpResponse('Invalid field name.')
+        response = HttpResponse(_('Invalid field name.'))
         response.status_code = 403
         return response
     
     def invalid_rating_response(self, request, context):
-        response = HttpResponse('Invalid rating value.')
+        response = HttpResponse(_('Invalid rating value.'))
         response.status_code = 403
         return response
         
