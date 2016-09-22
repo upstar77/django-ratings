@@ -3,6 +3,7 @@ from django.conf import settings
 from django.db import models
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
+from django.utils.encoding import python_2_unicode_compatible
 
 try:
     from django.utils.timezone import now
@@ -30,8 +31,9 @@ class Vote(models.Model):
     class Meta:
         unique_together = (('content_type', 'object_id', 'key', 'user', 'ip_address', 'cookie'))
 
-    def __unicode__(self):
-        return u"%s voted %s on %s" % (self.user_display, self.score, self.content_object)
+    @python_2_unicode_compatible
+    def __str__(self):
+        return "%s voted %s on %s" % (self.user_display, self.score, self.content_object)
 
     def save(self, *args, **kwargs):
         self.date_changed = now()
@@ -62,8 +64,9 @@ class Score(models.Model):
     class Meta:
         unique_together = (('content_type', 'object_id', 'key'),)
 
-    def __unicode__(self):
-        return u"%s scored %s with %s votes" % (self.content_object, self.score, self.votes)
+    @python_2_unicode_compatible
+    def __str__(self):
+        return "%s scored %s with %s votes" % (self.content_object, self.score, self.votes)
 
 
 class SimilarUser(models.Model):
@@ -78,8 +81,9 @@ class SimilarUser(models.Model):
     class Meta:
         unique_together = (('from_user', 'to_user'),)
 
-    def __unicode__(self):
-        print u"%s %s similar to %s" % (self.from_user, self.exclude and 'is not' or 'is', self.to_user)
+    @python_2_unicode_compatible
+    def __str__(self):
+        return "%s %s similar to %s" % (self.from_user, self.exclude and 'is not' or 'is', self.to_user)
 
 
 class IgnoredObject(models.Model):
