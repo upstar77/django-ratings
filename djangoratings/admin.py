@@ -1,5 +1,7 @@
+from __future__ import absolute_import
+
 from django.contrib import admin
-from models import Vote, Score
+from .models import Vote, Score
 
 class VoteAdmin(admin.ModelAdmin):
     list_display = ('content_object', 'user', 'ip_address', 'cookie', 'score', 'date_changed')

@@ -9,7 +9,7 @@ try:
 except ImportError:
     now = datetime.now
 
-from managers import VoteManager, SimilarUserManager
+from .managers import VoteManager, SimilarUserManager
 
 
 class Vote(models.Model):
