@@ -28,7 +28,7 @@ except ImportError:
     now = datetime.now
 
 def md5_hexdigest(value):
-    return md5(value).hexdigest()
+    return md5(value.encode()).hexdigest()
 
 class Rating(object):
     def __init__(self, score, votes):
