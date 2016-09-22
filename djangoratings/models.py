@@ -13,6 +13,7 @@ except ImportError:
 from .managers import VoteManager, SimilarUserManager
 
 
+@python_2_unicode_compatible
 class Vote(models.Model):
     content_type    = models.ForeignKey(ContentType, related_name="votes")
     object_id       = models.PositiveIntegerField()
@@ -31,7 +32,6 @@ class Vote(models.Model):
     class Meta:
         unique_together = (('content_type', 'object_id', 'key', 'user', 'ip_address', 'cookie'))
 
-    @python_2_unicode_compatible
     def __str__(self):
         return "%s voted %s on %s" % (self.user_display, self.score, self.content_object)
 
@@ -52,6 +52,7 @@ class Vote(models.Model):
     partial_ip_address = property(partial_ip_address)
 
 
+@python_2_unicode_compatible
 class Score(models.Model):
     content_type    = models.ForeignKey(ContentType)
     object_id       = models.PositiveIntegerField()
@@ -64,11 +65,11 @@ class Score(models.Model):
     class Meta:
         unique_together = (('content_type', 'object_id', 'key'),)
 
-    @python_2_unicode_compatible
     def __str__(self):
         return "%s scored %s with %s votes" % (self.content_object, self.score, self.votes)
 
 
+@python_2_unicode_compatible
 class SimilarUser(models.Model):
     from_user       = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="similar_users")
     to_user         = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="similar_users_from")
@@ -81,11 +82,11 @@ class SimilarUser(models.Model):
     class Meta:
         unique_together = (('from_user', 'to_user'),)
 
-    @python_2_unicode_compatible
     def __str__(self):
         return "%s %s similar to %s" % (self.from_user, self.exclude and 'is not' or 'is', self.to_user)
 
 
+@python_2_unicode_compatible
 class IgnoredObject(models.Model):
     user            = models.ForeignKey(settings.AUTH_USER_MODEL)
     content_type    = models.ForeignKey(ContentType)
@@ -96,5 +97,5 @@ class IgnoredObject(models.Model):
     class Meta:
         unique_together = (('content_type', 'object_id'),)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.content_object
