@@ -1,13 +1,14 @@
+from __future__ import absolute_import
 from django.db.models import IntegerField, PositiveIntegerField
 from django.conf import settings
 
-import forms
+from . import forms
 import itertools
 from datetime import datetime
 
-from models import Vote, Score
-from default_settings import RATINGS_VOTES_PER_IP
-from exceptions import *
+from .models import Vote, Score
+from .default_settings import RATINGS_VOTES_PER_IP
+from .exceptions import *
 
 if 'django.contrib.contenttypes' not in settings.INSTALLED_APPS:
     raise ImportError("djangoratings requires django.contrib.contenttypes in your INSTALLED_APPS")
@@ -27,7 +28,7 @@ except ImportError:
     now = datetime.now
 
 def md5_hexdigest(value):
-    return md5(value).hexdigest()
+    return md5(value.encode()).hexdigest()
 
 class Rating(object):
     def __init__(self, score, votes):
