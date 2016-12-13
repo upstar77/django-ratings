@@ -191,3 +191,35 @@ stores it in a context variable. If the user has not voted, the
 context variable will be 0::
 
 	{% rating_by_user user on instance.field as vote %}
+
+==========================
+Widget template
+==========================
+
+You can use the widget template to display rating stars on your rated object page.
+
+In your project file ``settings.py``, make sure ``'django.core.context_processors.request'``, is in ``TEMPLATE_CONTEXT_PROCESSORS``.
+
+
+In your template, add the stylesheet and javascript references: ::
+
+	{% load static %}
+	<html>
+	...
+	<link href="{% static 'djangoratings/css/style.min.css' %}" rel="stylesheet" type="text/css"/>
+	...
+	<-- In the footer -->
+	<script src="{%  static 'djangoratings/js/ratings.min.js' %}"></script>
+	....
+	<html>
+	
+To show the rating stars, add the following lines: ::
+
+	{% load ratings %}
+	<html>
+	...
+	{% ratings_object object_to_rate %}
+	...
+	</html>
+
+You can customize the widget template by overriding ``templates/djangoratings/widget_object_rating.html``, and also the css files ``static/djangoratings/css/style.css`` or ``static/djangoratings/css/style.min.css``
