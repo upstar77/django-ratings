@@ -1,0 +1,30 @@
+
+/*Star rating - inspired by http://codepen.io/adrian-ortega/pen/dpwgNJ */
+
+.stars{
+  direction: rtl;
+  font-size: 30px;
+  text-align: left;
+}
+
+.stars > .star , .stars > .mstar{
+  font-weight: normal;
+  font-style: normal;
+  display: inline-block;
+  position: relative;
+  padding-right: 5px;
+  cursor: pointer;
+}
+.stars > .star:before , .stars > .mstar:before {
+  content: '\2606';
+}
+
+.stars> .star:hover:before,
+.stars > .star:hover ~ .star:before,
+.stars > .star.selected:before, 
+.stars > .mstar.selected:before, 
+.stars > .star.selected ~ .star:before , 
+.stars > .mstar.selected ~ .mstar:before {
+  color: goldenrod;
+  content: '\2605';
+}

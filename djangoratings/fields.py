@@ -124,9 +124,12 @@ class RatingManager(object):
         except Vote.DoesNotExist:
             pass
         return
+
+    def get_range(self):
+        return self.field.range        
     
     def get_iterable_range(self):
-        return range(1, self.field.range) #started from 1, because 0 is equal to delete
+        return range(1, self.field.range)
         
     def add(self, score, user, ip_address, cookies={}, commit=True):
         """add(score, user, ip_address)
@@ -274,7 +277,12 @@ class RatingManager(object):
         if self.content_type is None:
             self.content_type = ContentType.objects.get_for_model(self.instance)
         return self.content_type
-    
+
+    def get_content_type_id(self):
+        if self.content_type is None:
+            self.content_type = ContentType.objects.get_for_model(self.instance)
+        return self.content_type.id
+
     def _update(self, commit=False):
         """Forces an update of this rating (useful for when Vote objects are removed)."""
         votes = Vote.objects.filter(

@@ -1,0 +1,51 @@
+{% load i18n %}
+{% load rating_filters %}
+{% load ratings %}
+
+{% block widget_rating %}
+		<hr />
+		{% trans "Global vote" %} :
+		<br />
+		{% if object.rating.score != None %}
+					
+				<div class="stars global-vote" data-votes="{{object.rating.votes}}" data-score="{{object.rating.get_rating}}" 
+											data-cumulscore="{{object.rating.score}}" data-contenttypeid="{{object.rating.get_content_type_id}}"
+											data-objectid="{{object.pk}}"  data-range="{{object.rating.get_range}}">
+					{% for i in object.rating.get_range|get_range_reversed_to1 %}
+						{% if i <= object.rating.get_rating %}
+							<span name="star" class="mstar selected" data-rating= {{i}}/></span>
+						{% else %}
+							<span name="star" class="mstar" data-rating= {{i}}/></span>
+						{% endif %}
+					{% endfor %}
+				</div>
+			
+				{% trans "Number of voters" %} : <p class="nb_voter" aria-hidden="true" >{{object.rating.votes}}</p>
+
+		{% else %}
+				<div class="stars global-vote">
+				{% for i in object.rating.get_range|get_range_reversed_to1 %}
+					<span name="star" class="mstar" data-rating= "{{i}}"/></span>
+				{% endfor %}
+				</div>
+						
+				<p class="nb_voter" aria-hidden="true" data-voter="{{object.rating.votes}}">Sorry, no one has voted yet!</p>
+		{% endif %}
+			
+		<br />
+		{% trans "Your vote" %} :
+		{% rating_by_request request on object.rating as user_vote %}
+
+		{% csrf_token %}
+		
+		<div class="stars user-vote" data-vote="{{user_vote}}" data-authenticated="{{user.is_authenticated}}">
+		{% for i in object.rating.get_range|get_range_reversed_to1 %}
+			{% if i <= user_vote %}
+			<span name="star" class="star selected" data-rating="{{i}}"/></span>
+			{% else %}
+			<span name="star" class="star" data-rating="{{i}}"/></span>
+			{% endif %}
+		{% endfor %}
+		</div>
+
+{% endblock %}

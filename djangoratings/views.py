@@ -4,6 +4,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, Http404
 from django.utils.translation import ugettext_lazy as _
+from django.views.decorators.http import require_POST
 from .exceptions import *
 from django.conf import settings
 from .default_settings import RATINGS_VOTES_PER_IP
@@ -124,3 +125,19 @@ class AddRatingFromModel(AddRatingView):
         
         return super(AddRatingFromModel, self).__call__(request, content_type.id,
                                                         object_id, field_name, score)
+
+@require_POST
+def rate_object(request, content_type_id, object_id, score):
+    """
+    Rate object
+    """
+    content_type = ContentType.objects.get_for_id(content_type_id)
+    element = content_type.get_object_for_this_type(pk=object_id)
+    msg = ""
+
+    if request.method == "POST" and request.is_ajax:
+        element.rating.add(score=score, user=request.user, ip_address=request.META['REMOTE_ADDR'])
+    else:
+        msg = "An error has ocurred."
+
+    return HttpResponse(msg)

@@ -87,3 +87,21 @@ def do_rating_by_user(parser, token):
         raise template.TemplateSyntaxError("fourth argument to '%s' tag must be 'as'" % bits[0])
     return RatingByUserNode(bits[1], bits[3], bits[5])
 register.tag('rating_by_user', do_rating_by_user)
+
+@register.inclusion_tag('djangoratings/widget_object_rating.html', takes_context=True)
+def ratings_object(context, element, read_only=False):
+    request = context.get('request')
+
+    if request is None:
+        raise Exception('Make sure you have "django.core.context_processors.request" in "TEMPLATE_CONTEXT_PROCESSORS"')
+
+    user = request.user.is_authenticated() and request.user or None
+
+
+    # Return the template context
+    return {
+        'object': element,
+        'request': request,
+        'user': request.user,
+    }
+
