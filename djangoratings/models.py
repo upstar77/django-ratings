@@ -15,11 +15,11 @@ from .managers import VoteManager, SimilarUserManager
 
 @python_2_unicode_compatible
 class Vote(models.Model):
-    content_type    = models.ForeignKey(ContentType, related_name="votes")
+    content_type    = models.ForeignKey(ContentType, related_name="votes", on_delete=models.CASCADE)
     object_id       = models.PositiveIntegerField()
     key             = models.CharField(max_length=32)
     score           = models.IntegerField()
-    user            = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, related_name="votes")
+    user            = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, related_name="votes", on_delete=models.CASCADE)
     ip_address      = models.GenericIPAddressField()
     cookie          = models.CharField(max_length=32, blank=True, null=True)
     date_added      = models.DateTimeField(default=now, editable=False)
@@ -54,7 +54,7 @@ class Vote(models.Model):
 
 @python_2_unicode_compatible
 class Score(models.Model):
-    content_type    = models.ForeignKey(ContentType)
+    content_type    = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id       = models.PositiveIntegerField()
     key             = models.CharField(max_length=32)
     score           = models.IntegerField()
@@ -71,8 +71,8 @@ class Score(models.Model):
 
 @python_2_unicode_compatible
 class SimilarUser(models.Model):
-    from_user       = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="similar_users")
-    to_user         = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="similar_users_from")
+    from_user       = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="similar_users", on_delete=models.CASCADE)
+    to_user         = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="similar_users_from", on_delete=models.CASCADE)
     agrees          = models.PositiveIntegerField(default=0)
     disagrees       = models.PositiveIntegerField(default=0)
     exclude         = models.BooleanField(default=False)
@@ -88,8 +88,8 @@ class SimilarUser(models.Model):
 
 @python_2_unicode_compatible
 class IgnoredObject(models.Model):
-    user            = models.ForeignKey(settings.AUTH_USER_MODEL)
-    content_type    = models.ForeignKey(ContentType)
+    user            = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    content_type    = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id       = models.PositiveIntegerField()
 
     content_object  = GenericForeignKey()
